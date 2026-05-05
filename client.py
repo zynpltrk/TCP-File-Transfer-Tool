@@ -15,15 +15,26 @@ def create_tcp_client(server_ip: str, server_port: int):
             client_socket.connect((server_ip,server_port))
             print("Connected successfully.")
 
-            message="Hello from client!"
-            client_socket.sendall(message.encode('utf-8'))
-            print(f"Sent: {message}")
+            # message="Hello from client!"
+            # client_socket.sendall(message.encode('utf-8'))
+            # print(f"Sent: {message}")
+            
+            file_path="sendMessage.txt"
+            with open(file_path, "rb") as file:
+                while True:
+                    chunk=file.read(1024)
 
-            response=client_socket.recv(1024)
-            if not response:
-                print("No data received from server.")
-            else:
-                print(f"Received: {response.decode('utf-8',errors='replace')}")
+                    if not chunk:
+                        break
+
+                    client_socket.sendall(chunk)
+            print("File sent successfully.")
+
+            # response=client_socket.recv(1024)
+            # if not response:
+            #     print("No data received from server.")
+            # else:
+            #     print(f"Received: {response.decode('utf-8',errors='replace')}")
 
         except socket.error as e:
             print(f"Socket error: {e}")
